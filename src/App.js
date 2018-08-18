@@ -16,7 +16,8 @@ class App extends Component {
       storageValue: 0,
       web3: null,
       buffer: null,
-      ipfsHash: ''
+      ipfsHash: '',
+      accounts: null
     }
 
     this.onChange = this.onChange.bind(this);
@@ -42,35 +43,22 @@ class App extends Component {
   }
 
   instantiateContract() {
-    /*
-     * SMART CONTRACT EXAMPLE
-     *
-     * Normally these functions would be called in the context of a
-     * state management library, but for convenience I've placed them here.
-     */
 
-    // const contract = require('truffle-contract')
-    // const simpleStorage = contract(SimpleStorageContract)
-    // simpleStorage.setProvider(this.state.web3.currentProvider)
+    const contract = require('truffle-contract');
+    const simpleStorage = contract(SimpleStorageContract);
+    simpleStorage.setProvider(this.state.web3.currentProvider);
 
-    // // Declaring this for later so we can chain functions on SimpleStorage.
-    // var simpleStorageInstance
-
-    // // Get accounts.
-    // this.state.web3.eth.getAccounts((error, accounts) => {
-    //   simpleStorage.deployed().then((instance) => {
-    //     simpleStorageInstance = instance
-
-    //     // Stores a given value, 5 by default.
-    //     return simpleStorageInstance.set(5, {from: accounts[0]})
-    //   }).then((result) => {
-    //     // Get the value from the contract to prove it worked.
-    //     return simpleStorageInstance.get.call(accounts[0])
-    //   }).then((result) => {
-    //     // Update state with the result.
-    //     return this.setState({ storageValue: result.c[0] })
-    //   })
-    // })
+    // Get accounts.
+    this.state.web3.eth.getAccounts((error, accounts) => {
+      simpleStorage.deployed().then((instance) => {
+        this.simpleStorageInstance = instance;
+        this.setState({accounts});
+        return this.simpleStorageInstance.get.call(accounts[0])
+      }).then((ipfsHash) => {
+        // Update state with the result.
+        return this.setState({ ipfsHash })
+      })
+    })
   }
 
   onChange(event){
@@ -95,8 +83,10 @@ class App extends Component {
         return;
       }
 
-      this.setState({ipfsHash: result[0].hash});
-      console.log(`ipfs hash is ${this.state.ipfsHash}`);
+      this.simpleStorageInstance.set(result[0].hash, {from: this.state.accounts[0]}).then((r) => {
+        this.setState({ipfsHash: result[0].hash});
+        console.log(`ipfs hash is ${this.state.ipfsHash}`);
+      });
     });
   }
   
