@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import SimpleStorageContract from '../build/contracts/SimpleStorage.json'
 import getWeb3 from './utils/getWeb3'
 import ipfs from './ipfs'
-
+import SignUp from './SignUp'
 import './css/oswald.css'
 import './css/open-sans.css'
 import './css/pure-min.css'
@@ -93,25 +93,26 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Applicatoin Store</a>
-        </nav>
+      <SignUp/>
+      // <div className="App">
+      //   <nav className="navbar pure-menu pure-menu-horizontal">
+      //       <a href="#" className="pure-menu-heading pure-menu-link">Applicatoin Store</a>
+      //   </nav>
 
-        <main className="container">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-              <h1>Your Image</h1>
-              <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
-              <h1>Upload Your Image</h1>
-              <form onSubmit={this.onSubmit}>
-                <input type='file' onChange={this.onChange}/>
-                <input type='submit'/>
-              </form>
-            </div>
-          </div>
-        </main>
-      </div>
+      //   <main className="container">
+      //     <div className="pure-g">
+      //       <div className="pure-u-1-1">
+      //         <h1>Your Image</h1>
+      //         <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
+      //         <h1>Upload Your Image</h1>
+      //         <form onSubmit={this.onSubmit}>
+      //           <input type='file' onChange={this.onChange}/>
+      //           <input type='submit'/>
+      //         </form>
+      //       </div>
+      //     </div>
+      //   </main>
+      // </div>
     );
   }
 }
