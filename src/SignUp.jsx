@@ -19,6 +19,9 @@ class SignUp extends Component {
 	
 	onSubmit = (event) => {
 		event.preventDefault();
+		this.props.memberManagerContract.getUsersCount().then((r) => {
+        	console.log(`SignUp.js ${r}`);
+      	});
 		console.log(`username ${this.state.username}\npassword ${this.state.password}\nisDeveloprt ${this.state.isDeveloper}`);
 		// Save to blockchain
 	}
@@ -28,6 +31,10 @@ class SignUp extends Component {
 		this.setState({
       		[event.target.id]: value
     	});
+	}
+
+	getUsersCount = () => {
+		this.props.memberManagerContract.usersCount.call();
 	}
 
 	render() {
@@ -62,6 +69,7 @@ class SignUp extends Component {
 				<br/>
 				<input type="submit" className="btn btn-success input-field"/>
 
+				<div>{this.getUsersCount}</div>
 			</form>
 			);
 	}
