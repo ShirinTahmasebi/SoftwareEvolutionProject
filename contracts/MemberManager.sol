@@ -38,6 +38,10 @@ contract MemberManager {
     	return usersCount;
   	}
 
+  	function getDevelopersCount() public view returns (uint) {
+    	return developersCount;
+  	}
+
 	// Constructor
 	function MemberManager() public {
 		addUser('user1', '123');
@@ -53,8 +57,17 @@ contract MemberManager {
 	}
 
 	// Add developer
-	function addDeveloper(string _username, string _password) private {
+	function addDeveloper(string _username, string _password) public {
 		developersCount ++;
 		developers[developersCount] = Developer(developersCount, _username, _password);
+	}
+
+	// Sign up developers
+	function signUp(string _username, string _password, bool isDeveloper) public {
+		if (isDeveloper) {
+			addDeveloper(_username, _password);
+		} else {
+			addUser(_username, _password);
+		}
 	}
 }

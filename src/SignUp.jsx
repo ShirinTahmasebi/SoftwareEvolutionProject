@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 
-import './css/oswald.css'
-import './css/open-sans.css'
-import './css/pure-min.css'
 import './SignUp.css'
 
 class SignUp extends Component {
@@ -16,15 +13,33 @@ class SignUp extends Component {
 			isDeveloper: false,
 		};
 	}
-	
+
 	onSubmit = (event) => {
 		event.preventDefault();
-		this.props.memberManagerContract.getUsersCount().then((r) => {
-        	console.log(`SignUp.js ${r}`);
-      	});
-		console.log(`username ${this.state.username}\npassword ${this.state.password}\nisDeveloprt ${this.state.isDeveloper}`);
+		
+		console.log(`${this.state.username}\n${this.state.password}\n${this.state.isDeveloper}`);
+		
+		if (!this.state.username || !this.state.password) {
+			alert("Fill the fields and try again!");
+			return;
+		}  
+		
 		// Save to blockchain
+		if (this.props.memberManagerContract  && this.props.accounts) {
+			if (this.state.isDeveloper) {
+				console.log('SignUp developer');
+				this.props.memberManagerContract.signUp(this.state.username, this.state.password, true, { from: this.props.accounts[0]}).then(() => {
+        			console.log(`Successdul developer signUp`);
+      			});
+			} else {
+				console.log('SignUp user');
+				this.props.memberManagerContract.signUp(this.state.username, this.state.password, false, { from: this.props.accounts[0]}).then(() => {
+        			console.log(`uccessdul user signUp`);
+      			});
+			}
+		}
 	}
+
 
 	handleInputChanged = (event) => {
 		const value = (event.target.type === 'checkbox')? event.target.checked:event.target.value;
