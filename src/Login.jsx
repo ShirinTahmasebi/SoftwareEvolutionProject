@@ -77,8 +77,11 @@ class Login extends Component {
 			return this.appropriateError();
 		}						
 		let isMemberCredentialsValid = (member[1] === this.state.username && member[2] === this.state.password);
-		this.props.setIsMemeberLoggedIn(isMemberCredentialsValid);
-		
+		this.props.setIsMemeberLoggedIn(
+			isMemberCredentialsValid, 
+			(isMemberCredentialsValid)? ((this.state.isDeveloperLogin) ? 1: 2): 0
+			);
+
 		if (!isMemberCredentialsValid) {
 			return this.appropriateError();
 		}

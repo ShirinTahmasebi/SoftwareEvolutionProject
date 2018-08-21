@@ -13,6 +13,8 @@ class App extends Component {
       accounts: null,
       memberManagerInstance: null,
       openLogin: false,
+      isMemberLoggedIn: false,
+      roleNumber: 0, // 0 for guest, 1 for developer, 2 for users, 3 for admin
     }
   }
 
@@ -52,8 +54,9 @@ class App extends Component {
     this.setState({openLogin});
   }
 
-  setIsMemberLoggedIn = (isMemberLoggedIn) => {
+  setIsMemberLoggedIn = (isMemberLoggedIn, roleNumber) => {
     this.setState({isMemberLoggedIn});
+    this.setState({roleNumber}); // 0 for guest, 1 for developer, 2 for users, 3 for admin
   }
 
   getSimpleHeader = () => {
@@ -84,12 +87,18 @@ class App extends Component {
       const header = this.getSimpleHeader();
       // Fill Content
       let content = null;
-      // If it is a developer show list of developed applications
-      content = this.getDeveloperContent();
-      // If it is a user show list of all developer's applications
-      content = this.getUserContent();
-      // If it is admin show a list of developers and users
-      content = this.getAdminContent();
+      if (this.state.roleNumber === 1) {
+        // If it is a developer show list of developed applications
+        content = this.getDeveloperContent();
+      } else if (this.state.roleNumber === 2) {
+        // If it is a user show list of all developer's applications
+        content = this.getUserContent();
+      } else if (this.state.roleNumber === 3) {
+        // If it is admin show a list of developers and users
+        content = this.getAdminContent();
+      } else {
+        // Probabely user has not logged in !
+      }
 
       return (
         <div>
