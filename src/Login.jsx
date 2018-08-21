@@ -60,8 +60,10 @@ class Login extends Component {
 
 		let getMemberById;
 		if (this.state.isDeveloperLogin) {
+			// Contract not null check has been done in parent method
 			getMemberById = this.props.memberManagerContract.developers;
 		} else {
+			// Contract not null check has been done in parent method
 			getMemberById = this.props.memberManagerContract.users;
 		}
 
@@ -79,7 +81,8 @@ class Login extends Component {
 		let isMemberCredentialsValid = (member[1] === this.state.username && member[2] === this.state.password);
 		this.props.setIsMemeberLoggedIn(
 			isMemberCredentialsValid, 
-			(isMemberCredentialsValid)? ((this.state.isDeveloperLogin) ? 1: 2): 0
+			(isMemberCredentialsValid)? ((this.state.isDeveloperLogin) ? 1: 2): 0,
+			member[0]
 			);
 
 		if (!isMemberCredentialsValid) {

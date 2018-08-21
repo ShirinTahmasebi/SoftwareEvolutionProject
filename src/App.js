@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import MemberManager from '../build/contracts/MemberManager.json'
+import ApplicationManager from '../build/contracts/ApplicationManager.json'
 import getWeb3 from './utils/getWeb3'
 import SignUp from './SignUp'
 import Login from './Login'
+import DeveloperConsole from './DeveloperConsole'
 
 class App extends Component {
   constructor(props) {
@@ -12,9 +14,11 @@ class App extends Component {
       web3: null,
       accounts: null,
       memberManagerInstance: null,
+      applicationManagerInstance: null,
       openLogin: false,
       isMemberLoggedIn: false,
       roleNumber: 0, // 0 for guest, 1 for developer, 2 for users, 3 for admin
+      memberId: 0, // It can be id of a user of a develoer - Role is stored in roleNumber
     }
   }
 
@@ -38,14 +42,21 @@ class App extends Component {
 
     const contract = require('truffle-contract');
     const memberManager = contract(MemberManager);
+    const applicationManager = contract(ApplicationManager);
     memberManager.setProvider(this.state.web3.currentProvider);
+    applicationManager.setProvider(this.state.web3.currentProvider);
 
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
+      this.setState({accounts});
       // When memberManager has been deployed, do ...
       memberManager.deployed().then((memManagerInstance) => {
-        this.setState({accounts});
         this.setState({memberManagerInstance:memManagerInstance});
+      });
+
+      // When applicationManager has been deployed, do ...
+      applicationManager.deployed().then((appManagerInstnace) => {
+        this.setState({applicationManagerInstance:appManagerInstnace});
       });
     })
   }
@@ -54,9 +65,9 @@ class App extends Component {
     this.setState({openLogin});
   }
 
-  setIsMemberLoggedIn = (isMemberLoggedIn, roleNumber) => {
-    this.setState({isMemberLoggedIn});
-    this.setState({roleNumber}); // 0 for guest, 1 for developer, 2 for users, 3 for admin
+  setIsMemberLoggedIn = (isMemberLoggedIn, roleNumber, memberId) => {
+    // Role number = 0 for guest, 1 for developer, 2 for users, 3 for admin
+    this.setState({isMemberLoggedIn, roleNumber, memberId});
   }
 
   getSimpleHeader = () => {
@@ -70,7 +81,14 @@ class App extends Component {
   }
 
   getDeveloperContent = () => {
-    return (<div>Developer content</div>);
+    return (
+      <DeveloperConsole 
+        memberManagerContract={this.state.memberManagerInstance} 
+        applicationManagerContract={this.state.applicationManagerInstance} 
+        accounts={this.state.accounts}
+        memberId={this.state.memberId} 
+      />
+    );
   }
 
   getUserContent = () => {
