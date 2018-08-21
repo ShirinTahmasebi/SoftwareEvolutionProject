@@ -27,12 +27,10 @@ class SignUp extends Component {
 		// Save to blockchain
 		if (this.props.memberManagerContract  && this.props.accounts) {
 			if (this.state.isDeveloper) {
-				console.log('SignUp developer');
 				this.props.memberManagerContract.signUp(this.state.username, this.state.password, true, { from: this.props.accounts[0]}).then(() => {
         			console.log(`Successdul developer signUp`);
       			});
 			} else {
-				console.log('SignUp user');
 				this.props.memberManagerContract.signUp(this.state.username, this.state.password, false, { from: this.props.accounts[0]}).then(() => {
         			console.log(`uccessdul user signUp`);
       			});
@@ -46,6 +44,21 @@ class SignUp extends Component {
 		this.setState({
       		[event.target.id]: value
     	});
+	}
+
+	render() {
+		return (
+			<div>
+				<div className="row">
+					<div className="col-xs-4"></div>
+					<div className="col-xs-4 body-sections">
+						{this.getFormHtml()}
+					</div>
+					<div className="col-xs-4"></div>
+				</div>
+				
+			</div>
+			);
 	}
 
 	getFormHtml = () => {
@@ -86,27 +99,6 @@ class SignUp extends Component {
 		);
 	}
 
-	render() {
-		return (
-			<div>
-				<div className="header row">
-					<div className="col-xs-4 header-sections"></div>
-					<div className="col-xs-4 header-sections header-title">Application Store</div>
-					<div className="col-xs-4 header-sections header-login">
-						<button type="button" className="login-button btn btn-default btn-lg">Login</button> 
-					</div>
-				</div>
-				<div className="row">
-					<div className="col-xs-4"></div>
-					<div className="col-xs-4 body-sections">
-						{this.getFormHtml()}
-					</div>
-					<div className="col-xs-4"></div>
-				</div>
-				
-			</div>
-			);
-	}
 }
 
 export default SignUp;

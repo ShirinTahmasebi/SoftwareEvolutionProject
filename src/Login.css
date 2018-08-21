@@ -1,0 +1,25 @@
+.header {
+	height: 60px;
+	background-color: #000;
+	text-align: center;
+	padding: 15px;
+}
+
+.header-title {
+	font-size: 25px;
+}
+
+.header-sections {
+	color: #ffffff;
+}
+
+.header-login {
+	text-align: right;
+}
+
+.login-button {
+	background-color: #ffffff;
+	height: 30px;
+	text-align: center;
+	margin: 5px;
+}

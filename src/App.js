@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MemberManager from '../build/contracts/MemberManager.json'
 import getWeb3 from './utils/getWeb3'
 import SignUp from './SignUp'
+import Login from './Login'
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class App extends Component {
       web3: null,
       accounts: null,
       memberManagerInstance: null,
+      openLogin: false,
     }
   }
 
@@ -46,11 +48,84 @@ class App extends Component {
     })
   }
   
+  openLoginPage = (openLogin) => {
+    this.setState({openLogin});
+  }
+
+  setIsMemberLoggedIn = (isMemberLoggedIn) => {
+    this.setState({isMemberLoggedIn});
+  }
+
+  getSimpleHeader = () => {
+    return (
+      <div className="header row">
+          <div className="col-xs-4 header-sections"></div>
+          <div className="col-xs-4 header-sections header-title">Application Store</div>
+          <div className="col-xs-4 header-sections"></div>
+        </div>
+      );
+  }
+
+  getDeveloperContent = () => {
+    return (<div>Developer content</div>);
+  }
+
+  getUserContent = () => {
+    return (<div>User content</div>);
+  }
+
+  getAdminContent = () => {
+    return (<div>Admin content</div>);
+  }
 
   render() {
-    return (
-      <SignUp memberManagerContract={this.state.memberManagerInstance} accounts={this.state.accounts}/>
-    );
+    if (this.state.isMemberLoggedIn) {
+      // Show header and appropriate content based on user's role
+      const header = this.getSimpleHeader();
+      // Fill Content
+      let content = null;
+      // If it is a developer show list of developed applications
+      content = this.getDeveloperContent();
+      // If it is a user show list of all developer's applications
+      content = this.getUserContent();
+      // If it is admin show a list of developers and users
+      content = this.getAdminContent();
+
+      return (
+        <div>
+          {header}
+          {content}
+        </div>);
+
+    } else if(!this.state.openLogin) {
+      // Show signup form and login buttons in header
+      return (
+        <div>
+          <Login 
+            memberManagerContract={this.state.memberManagerInstance} 
+            accounts={this.state.accounts} 
+            openLoginCallback={this.openLoginPage}
+            openLoginFlag={this.state.openLogin}
+            setIsMemeberLoggedIn={this.setIsMemberLoggedIn}
+          />
+          <SignUp memberManagerContract={this.state.memberManagerInstance} accounts={this.state.accounts}/>
+        </div>
+      );
+    } else {
+      // Show Login form with signup buttons in header
+        return (
+          <div>
+            <Login 
+              memberManagerContract={this.state.memberManagerInstance} 
+              accounts={this.state.accounts} 
+              openLoginCallback={this.openLoginPage}
+              openLoginFlag={this.state.openLogin}
+              setIsMemeberLoggedIn={this.setIsMemberLoggedIn}
+            />
+          </div>
+        );
+    }
+
   }
 }
 

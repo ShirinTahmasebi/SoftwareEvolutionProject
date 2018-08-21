@@ -23,7 +23,13 @@ contract MemberManager {
 	}
 
 	// Store & fetch developers
-	mapping (uint => Developer) public developers; 
+	mapping (uint => Developer) public developers;
+
+	// Get user id via username
+	mapping (bytes32 => uint) public userIds; 
+
+	// Get developer id via username
+	mapping (bytes32 => uint) public developerIds; 
 
 	// Store & fetch users
 	mapping (uint => User) public users; 
@@ -54,12 +60,14 @@ contract MemberManager {
 	function addUser(string _username, string _password) private {
 		usersCount ++;
 		users[usersCount] = User(usersCount, _username, _password);
+		userIds[stringToBytes32(_username)] = usersCount;
 	}
 
 	// Add developer
 	function addDeveloper(string _username, string _password) public {
 		developersCount ++;
 		developers[developersCount] = Developer(developersCount, _username, _password);
+		developerIds[stringToBytes32(_username)] = developersCount;
 	}
 
 	// Sign up developers
@@ -69,5 +77,24 @@ contract MemberManager {
 		} else {
 			addUser(_username, _password);
 		}
+	}
+
+	function getDeveloperIdByUsername(string _username) public view returns (uint) {
+		return developerIds[stringToBytes32(_username)];
+	}
+
+	function getUserIdByUsername(string _username) public view returns (uint) {
+		return userIds[stringToBytes32(_username)];
+	}
+
+	function stringToBytes32(string memory source) returns (bytes32 result) {
+	    bytes memory tempEmptyStringTest = bytes(source);
+	    if (tempEmptyStringTest.length == 0) {
+	        return 0x0;
+	    }
+
+	    assembly {
+	        result := mload(add(source, 32))
+	    }
 	}
 }
