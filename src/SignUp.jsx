@@ -48,15 +48,11 @@ class SignUp extends Component {
     	});
 	}
 
-	getUsersCount = () => {
-		this.props.memberManagerContract.usersCount.call();
-	}
-
-	render() {
+	getFormHtml = () => {
 		return (
-			<form onSubmit={this.onSubmit}>
-				<div className="row input-field"> 
-					<div className="form-group col-xs-4">
+			<form onSubmit={this.onSubmit} className="form-container">
+				<div className="input-field"> 
+					<div className="form-group">
 						<label htmlFor="username">Username:</label>
 						<input 
 							type="text" 
@@ -66,8 +62,8 @@ class SignUp extends Component {
 						/>
 					</div>
 				</div>
-				<div className="row input-field"> 
-					<div className="form-group col-xs-4">
+				<div className="input-field"> 
+					<div className="form-group">
 						<label htmlFor="password">Password:</label>
 						<input 
 							type="password" 
@@ -78,14 +74,37 @@ class SignUp extends Component {
 					</div>
 
 				</div>
-				<div className="checkbox input-field">
-					<input type="checkbox" id="isDeveloper" onChange={this.handleInputChanged}/> I am a developer!
+				<div className="input-field">
+					<div className="checkbox input-field">
+						<input type="checkbox" id="isDeveloper" onChange={this.handleInputChanged}/>
+						<label htmlFor="isDeveloper">I am a developer!</label>
+					</div>
+					<br/>
 				</div>
-				<br/>
-				<input type="submit" className="btn btn-success input-field"/>
-
-				<div>{this.getUsersCount}</div>
+				<input type="submit" className="btn btn-success btn-lg input-field"/>
 			</form>
+		);
+	}
+
+	render() {
+		return (
+			<div>
+				<div className="header row">
+					<div className="col-xs-4 header-sections"></div>
+					<div className="col-xs-4 header-sections header-title">Application Store</div>
+					<div className="col-xs-4 header-sections header-login">
+						<button type="button" className="login-button btn btn-default btn-lg">Login</button> 
+					</div>
+				</div>
+				<div className="row">
+					<div className="col-xs-4"></div>
+					<div className="col-xs-4 body-sections">
+						{this.getFormHtml()}
+					</div>
+					<div className="col-xs-4"></div>
+				</div>
+				
+			</div>
 			);
 	}
 }
