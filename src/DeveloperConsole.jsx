@@ -12,6 +12,8 @@ class DeveloperConsole extends Component {
       whichItemShouldDisplay: 'consoleButtonsPage',
       buffer: null,
       ipfsHash: '',
+      name: null,
+      description: null,
     };
   }
 
@@ -41,6 +43,13 @@ class DeveloperConsole extends Component {
 
   onUploadApplicationSubmit = (event) => {
     event.preventDefault();
+    
+    // Check whether all fields have been filled or not.
+    if (!this.state.name || !this.state.description){
+      alert('Fill all of the fields and try again!');
+      return;
+    }
+
     ipfs.files.add(this.state.buffer,  (error, result) => {
       if (error) {
         console.error(`onSubmit ipfs.add error is ${error}`);
@@ -50,13 +59,15 @@ class DeveloperConsole extends Component {
 
       if (this.props.memberManagerContract && this.props.applicationManagerContract && this.props.accounts) {
         this.props.applicationManagerContract.addApplication(
-          'name', 
-          'description', 
+          this.state.name, 
+          this.state.description, 
           this.state.ipfsHash, 
           parseInt(this.props.memberId, 10), 
           {from: this.props.accounts[0]}
         ).then(() => {
-          return this.props.applicationManagerContract.applications(1);
+          return this.props.applicationManagerContract.getApplicationsCount();
+        }).then((applicatoinCount) => {
+          return this.props.applicationManagerContract.applications(applicatoinCount);
         }).then ((application) => {
             console.log(`id => ${application[0]}`);
             console.log(`name => ${application[1]}`);
@@ -64,6 +75,7 @@ class DeveloperConsole extends Component {
             console.log(`ipfsHash => ${application[3]}`);
             console.log(`memberId => ${application[4]}`);
             console.log(`likes count => ${application[5]}`);
+            this.setState({whichItemShouldDisplay: 'listOfApplicationsPage'});
         });
         ; 
       }
@@ -83,6 +95,13 @@ class DeveloperConsole extends Component {
       console.log(that.state.buffer);
     };
   }
+
+  handleInputChanged = (event) => {
+    this.setState({
+          [event.target.id]: event.target.value
+      });
+  }
+
 
   getConsoleButtonsPage = () => {
     return (
@@ -118,18 +137,47 @@ class DeveloperConsole extends Component {
 
   getCreateApplicationPage = () => {
     return (
-      <div>
-        <div>
-            <div>
-              <h1>Your Application: </h1>
-              <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
-              <h1>Upload Your Application:</h1>
-              <form onSubmit={this.onUploadApplicationSubmit}>
-                <input type='file' onChange={this.onSelectedFileChanged}/>
-                <input type='submit'/>
-              </form>
+      <div className="row">
+        <div className="col-xs-2"></div>
+        <div className="col-xs-8 body-sections-small-rtl-text">
+          <h1>Fill the form and enter your application information:</h1>
+          <form onSubmit={this.onUploadApplicationSubmit} className="form-container">
+            <div className="input-field"> 
+              <div className="form-group">
+                <label htmlFor="name">Application Name:</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id="name" 
+                  onChange={this.handleInputChanged}
+                />
+              </div>
             </div>
-          </div>
+            <div className="input-field"> 
+              <div className="form-group">
+                <label htmlFor="description">Description:</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  id="description" 
+                  onChange={this.handleInputChanged}
+                />
+              </div>
+            </div>
+            <div className="input-field">
+              <input type='file' onChange={this.onSelectedFileChanged}/>
+              <br/>
+              <br/>
+              <br/>
+              <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <input type="submit" className="btn btn-success btn-lg input-field"/>
+          </form>
+        </div>
+        <div className="col-xs-2"></div>
       </div>
     );
   }
