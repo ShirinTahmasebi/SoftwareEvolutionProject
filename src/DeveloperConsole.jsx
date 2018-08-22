@@ -26,6 +26,7 @@ class DeveloperConsole extends Component {
     } else if (event.target.id === "listOfApplicationsButton") {
       console.log('listOfApplicationsButton');
       this.setState({whichItemShouldDisplay: 'listOfApplicationsPage'});
+      this.getApplications(event);
     }
   }
 
@@ -116,9 +117,6 @@ class DeveloperConsole extends Component {
     });
   }
 
-  createApplicationCard = (applicationName, applicationDescription) => {
-  }
-
   getConsoleButtonsPage = () => {
     return (
       <div>
@@ -205,51 +203,39 @@ class DeveloperConsole extends Component {
             <div className="col-xs-2"></div>
             <div className="col-xs-8 body-sections">
               <div className="body-sections row">
-                <div className="col-xs-3 console-text-container">
+                <div className="col-xs-5 console-title-container">
                   Name:
                 </div>
-                <div className="col-xs-9 console-text-container">
+                <div className="col-xs-7 console-content-container">
                   <h1>{application[1]}</h1>
                 </div>
               </div>
               <div className="body-sections row">
-                <div className="col-xs-3 console-text-container">
+                <div className="col-xs-5 console-title-container">
                   Description:
                 </div>
-                <div className="col-xs-9 console-text-container">
+                <div className="col-xs-7 console-content-container">
                   {application[2]}
                 </div>
               </div>
               <br/>
-              <img src={`https://ipfs.io/ipfs/${application[3]}`} alt=""/>
+              <div className="body-sections row">
+                <div className="col-xs-5 console-title-container">
+                  Application Preview:
+                </div>
+                <div className="col-xs-7 console-content-container">
+                  <img src={`https://ipfs.io/ipfs/${application[3]}`} alt=""/>
+                </div>
+              </div>
             </div>
             <div className="col-xs-2"></div>
           </div>
-          <hr/>
+          <hr style={{margin: "40px"}}/>
         </div>
     );
     return (
       <div>
-        <div className="row">
-          <div className="col-xs-4"></div>
-          <div className="col-xs-4 body-sections row">
-            <div className="col-xs-6 console-buttons-container">
-              <input 
-                type="button" 
-                id="refreshApplicationsList"
-                className="console-button btn btn-primary btn-lg" 
-                value="Refresh List" 
-                onClick={this.getApplications}
-              />
-            </div>
-            <div className="col-xs-6 console-buttons-container">
-            </div>
-          </div>
-          <div className="col-xs-4"></div>
-        </div>
-        <div>
-          {applicationListCards}
-        </div>
+        {applicationListCards}
       </div>
     );
   }

@@ -21,6 +21,10 @@
 	text-align: center;
 }
 
-.console-text-container {
+.console-content-container {
 	text-align: left;
+}
+
+.console-title-container {
+	text-align: right;
 }
