@@ -14,6 +14,8 @@ class DeveloperConsole extends Component {
       ipfsHash: '',
       name: null,
       description: null,
+      applications: [],
+      render: false,
     };
   }
 
@@ -69,12 +71,6 @@ class DeveloperConsole extends Component {
         }).then((applicatoinCount) => {
           return this.props.applicationManagerContract.applications(applicatoinCount);
         }).then ((application) => {
-            console.log(`id => ${application[0]}`);
-            console.log(`name => ${application[1]}`);
-            console.log(`description => ${application[2]}`);
-            console.log(`ipfsHash => ${application[3]}`);
-            console.log(`memberId => ${application[4]}`);
-            console.log(`likes count => ${application[5]}`);
             this.setState({whichItemShouldDisplay: 'listOfApplicationsPage'});
         });
         ; 
@@ -102,6 +98,26 @@ class DeveloperConsole extends Component {
       });
   }
 
+  getApplications = (event) => {
+    this.setState({applications: []});
+    this.props.applicationManagerContract.getApplicationsCount()
+    .then((applicatoinCount) => {
+      const addApplicationToStateListMethod = (application) => {
+        this.state.applications.push(application);
+        this.setState({render: true});
+      }
+      
+      for (let i = 1; i <= applicatoinCount; i++) {
+        this.props.applicationManagerContract.applications(i)
+        .then( (application) => {
+          addApplicationToStateListMethod(application);
+        });
+      }
+    });
+  }
+
+  createApplicationCard = (applicationName, applicationDescription) => {
+  }
 
   getConsoleButtonsPage = () => {
     return (
@@ -130,7 +146,6 @@ class DeveloperConsole extends Component {
           </div>
           <div className="col-xs-4"></div>
         </div>
-        
       </div>
       );
   }
@@ -183,7 +198,60 @@ class DeveloperConsole extends Component {
   }
 
   getListOfApplicationsPage = () => {
-    return (<div>List Of Applications</div>);
+    const applicationListCards = this.state.applications.map(
+      (application) => 
+      <div>
+        <div key={application[0]} className="row">
+            <div className="col-xs-2"></div>
+            <div className="col-xs-8 body-sections">
+              <div className="body-sections row">
+                <div className="col-xs-3 console-text-container">
+                  Name:
+                </div>
+                <div className="col-xs-9 console-text-container">
+                  <h1>{application[1]}</h1>
+                </div>
+              </div>
+              <div className="body-sections row">
+                <div className="col-xs-3 console-text-container">
+                  Description:
+                </div>
+                <div className="col-xs-9 console-text-container">
+                  {application[2]}
+                </div>
+              </div>
+              <br/>
+              <img src={`https://ipfs.io/ipfs/${application[3]}`} alt=""/>
+            </div>
+            <div className="col-xs-2"></div>
+          </div>
+          <hr/>
+        </div>
+    );
+    return (
+      <div>
+        <div className="row">
+          <div className="col-xs-4"></div>
+          <div className="col-xs-4 body-sections row">
+            <div className="col-xs-6 console-buttons-container">
+              <input 
+                type="button" 
+                id="refreshApplicationsList"
+                className="console-button btn btn-primary btn-lg" 
+                value="Refresh List" 
+                onClick={this.getApplications}
+              />
+            </div>
+            <div className="col-xs-6 console-buttons-container">
+            </div>
+          </div>
+          <div className="col-xs-4"></div>
+        </div>
+        <div>
+          {applicationListCards}
+        </div>
+      </div>
+    );
   }
 }
 
