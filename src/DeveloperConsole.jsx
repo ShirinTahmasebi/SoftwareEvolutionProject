@@ -22,6 +22,7 @@ class DeveloperConsole extends Component {
       name: null,
       description: null,
       applications: [],
+      developers: null,
       render: false,
     };
   }
@@ -107,20 +108,27 @@ class DeveloperConsole extends Component {
   }
 
   getApplications = (event) => {
-    this.setState({applications: []});
+    this.setState({applications: [], developers: []});
     this.props.applicationManagerContract.applicationIdsByDeveloperId(parseInt(this.props.memberId, 10))
     .then( (applicationIdsString) => {
       const applicationIds = applicationIdsString.split(":");
 
-      const addApplicationToStateListMethod = (application) => {
+      const addApplicationToStateListMethod = (application, developer) => {
         this.state.applications.push(application);
+        this.state.developers.push(developer);
         this.setState({render: true});
       }
       
       for (let i = 1; i <= applicationIds.length; i++) {
+        let application;
         this.props.applicationManagerContract.applications(applicationIds[i])
-        .then( (application) => {
-          addApplicationToStateListMethod(application);
+        .then( (_application) => {
+          application = _application;
+          return _application;
+        }). then((_application) => {
+          return this.props.memberManagerContract.developers(_application[4]);
+        }).then((developer) => {
+          addApplicationToStateListMethod(application, developer);
         });
       }
     });
@@ -206,7 +214,7 @@ class DeveloperConsole extends Component {
 
   getListOfApplicationsPage = () => {
     const applicationListCards = this.state.applications.map(
-      (application) => 
+      (application, index) => 
       <div>
         <div key={application[0]} className="row">
             <div className="col-xs-2"></div>
@@ -225,6 +233,14 @@ class DeveloperConsole extends Component {
                 </div>
                 <div className="col-xs-7 console-content-container">
                   {application[2]}
+                </div>
+              </div>
+              <div className="body-sections row">
+                <div className="col-xs-5 console-title-container">
+                  Developer Name:
+                </div>
+                <div className="col-xs-7 console-content-container">
+                  {this.state.developers[index][1]}
                 </div>
               </div>
               <br/>
