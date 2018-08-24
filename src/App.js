@@ -5,6 +5,7 @@ import getWeb3 from './utils/getWeb3'
 import SignUp from './SignUp'
 import Login from './Login'
 import DeveloperConsole from './DeveloperConsole'
+import UserConsole from './UserConsole'
 
 class App extends Component {
   constructor(props) {
@@ -92,7 +93,14 @@ class App extends Component {
   }
 
   getUserContent = () => {
-    return (<div>User content</div>);
+    return (
+        <UserConsole 
+          memberManagerContract={this.state.memberManagerInstance} 
+          applicationManagerContract={this.state.applicationManagerInstance} 
+          accounts={this.state.accounts}
+          memberId={this.state.memberId}
+        />
+      );
   }
 
   getAdminContent = () => {

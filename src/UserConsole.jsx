@@ -1,22 +1,15 @@
 import React, { Component } from 'react'
 import ipfs from './ipfs'
 
-import './DeveloperConsole.css'
+import './UserConsole.css'
 
-
-const ITEM_0 = "consoleButtonsPage";
-const BUTTON_FOR_ITEM_1 = "newApplicationButton";
-const ITEM_1 = "createApplicationPage";
-const BUTTON_FOR_ITEM_2 = "listOfApplicationsButton";
-const ITEM_2 = "listOfApplicationsPage";
-
-class DeveloperConsole extends Component {
+class UserConsole extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      whichItemShouldDisplay: ITEM_0,
+      whichItemShouldDisplay: 'consoleButtonsPage',
       buffer: null,
       ipfsHash: '',
       name: null,
@@ -27,12 +20,12 @@ class DeveloperConsole extends Component {
   }
 
   inputClicked = (event) => {
-    if (event.target.id === BUTTON_FOR_ITEM_1) {
-      console.log(BUTTON_FOR_ITEM_1);
-      this.setState({whichItemShouldDisplay: ITEM_1});
-    } else if (event.target.id === BUTTON_FOR_ITEM_2) {
-      console.log(BUTTON_FOR_ITEM_2);
-      this.setState({whichItemShouldDisplay: ITEM_2});
+    if (event.target.id === "newApplicationButton") {
+      console.log('newApplicationButton');
+      this.setState({whichItemShouldDisplay: 'createApplicationPage'});
+    } else if (event.target.id === "listOfApplicationsButton") {
+      console.log('listOfApplicationsButton');
+      this.setState({whichItemShouldDisplay: 'listOfApplicationsPage'});
       this.getApplications(event);
     }
   }
@@ -40,11 +33,11 @@ class DeveloperConsole extends Component {
 
   render() {
     let content = null;
-    if (this.state.whichItemShouldDisplay === ITEM_0) {
+    if (this.state.whichItemShouldDisplay === 'consoleButtonsPage') {
       content = this.getConsoleButtonsPage();
-    } else if (this.state.whichItemShouldDisplay === ITEM_1) {
+    } else if (this.state.whichItemShouldDisplay === 'createApplicationPage') {
       content = this.getCreateApplicationPage();
-    } else if (this.state.whichItemShouldDisplay === ITEM_2) {
+    } else if (this.state.whichItemShouldDisplay === 'listOfApplicationsPage') {
       content = this.getListOfApplicationsPage();
     }
 
@@ -79,7 +72,7 @@ class DeveloperConsole extends Component {
         }).then((applicatoinCount) => {
           return this.props.applicationManagerContract.applications(applicatoinCount);
         }).then ((application) => {
-            this.setState({whichItemShouldDisplay: ITEM_2});
+            this.setState({whichItemShouldDisplay: 'listOfApplicationsPage'});
         });
         ; 
       }
@@ -108,17 +101,15 @@ class DeveloperConsole extends Component {
 
   getApplications = (event) => {
     this.setState({applications: []});
-    this.props.applicationManagerContract.applicationIdsByDeveloperId(parseInt(this.props.memberId, 10))
-    .then( (applicationIdsString) => {
-      const applicationIds = applicationIdsString.split(":");
-
+    this.props.applicationManagerContract.getApplicationsCount()
+    .then((applicatoinCount) => {
       const addApplicationToStateListMethod = (application) => {
         this.state.applications.push(application);
         this.setState({render: true});
       }
       
-      for (let i = 1; i <= applicationIds.length; i++) {
-        this.props.applicationManagerContract.applications(applicationIds[i])
+      for (let i = 1; i <= applicatoinCount; i++) {
+        this.props.applicationManagerContract.applications(i)
         .then( (application) => {
           addApplicationToStateListMethod(application);
         });
@@ -250,4 +241,4 @@ class DeveloperConsole extends Component {
   }
 }
 
-export default DeveloperConsole;
+export default UserConsole;
