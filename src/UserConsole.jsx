@@ -111,7 +111,8 @@ class UserConsole extends Component {
   };
 
   getListOfApplicationsPage = () => {
-    return <ApplicationList applications={this.state.applications} developers={this.state.developers}/>;
+    return <ApplicationList applications={this.state.applications}
+                            developers={this.state.developers}/>;
   };
 }
 

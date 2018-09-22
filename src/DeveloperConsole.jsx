@@ -213,7 +213,12 @@ class DeveloperConsole extends Component {
   };
 
   getListOfApplicationsPage = () => {
-    return <ApplicationList applications={this.state.applications}/>;
+    return <ApplicationList applications={this.state.applications}
+                            onBackButtonClicked={this.backToConsoleButtonPage}/>;
+  };
+
+  backToConsoleButtonPage = () => {
+    this.setState({whichItemShouldDisplay: ITEM_0});
   };
 }
 

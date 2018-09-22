@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import './ApplicationList.css';
+
 
 class ApplicationList extends Component {
   render() {
@@ -49,7 +51,22 @@ class ApplicationList extends Component {
     );
     return (
       <div>
-        {applicationListCards}
+        <div style={{height: '30px'}}/>
+        <div className="table-container">
+          <div className="table-header">
+            <div className="col-xs-4 table-header-sections"/>
+            <div className="col-xs-4 table-header-sections table-header-title">Applications List</div>
+            <div className="col-xs-4 table-header-sections header-login">
+              {(this.props.onBackButtonClicked) ?
+                <input type="button" className="login-button btn btn-default btn-lg" value="Back"
+                       onClick={this.props.onBackButtonClicked}/> : ''}
+
+            </div>
+          </div>
+          <div className="table-body">
+            {applicationListCards}
+          </div>
+        </div>
       </div>
     );
   }
