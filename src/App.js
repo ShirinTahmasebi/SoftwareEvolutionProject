@@ -74,9 +74,9 @@ class App extends Component {
   getSimpleHeader = () => {
     return (
       <div className="header row">
-          <div className="col-xs-4 header-sections"></div>
+          <div className="col-xs-4 header-sections"/>
           <div className="col-xs-4 header-sections header-title">Application Store</div>
-          <div className="col-xs-4 header-sections"></div>
+          <div className="col-xs-4 header-sections"/>
         </div>
       );
   }

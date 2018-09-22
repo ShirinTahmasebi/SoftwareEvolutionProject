@@ -46,7 +46,7 @@ class UserConsole extends Component {
 
   onUploadApplicationSubmit = (event) => {
     event.preventDefault();
-    
+
     // Check whether all fields have been filled or not.
     if (!this.state.name || !this.state.description){
       alert('Fill all of the fields and try again!');
@@ -62,10 +62,10 @@ class UserConsole extends Component {
 
       if (this.props.memberManagerContract && this.props.applicationManagerContract && this.props.accounts) {
         this.props.applicationManagerContract.addApplication(
-          this.state.name, 
-          this.state.description, 
-          this.state.ipfsHash, 
-          parseInt(this.props.memberId, 10), 
+          this.state.name,
+          this.state.description,
+          this.state.ipfsHash,
+          parseInt(this.props.memberId, 10),
           {from: this.props.accounts[0]}
         ).then(() => {
           return this.props.applicationManagerContract.getApplicationsCount();
@@ -74,7 +74,7 @@ class UserConsole extends Component {
         }).then ((application) => {
             this.setState({whichItemShouldDisplay: 'listOfApplicationsPage'});
         });
-        ; 
+        ;
       }
     });
   }
@@ -107,7 +107,7 @@ class UserConsole extends Component {
         this.state.applications.push(application);
         this.setState({render: true});
       }
-      
+
       for (let i = 1; i <= applicatoinCount; i++) {
         this.props.applicationManagerContract.applications(i)
         .then( (application) => {
@@ -121,28 +121,28 @@ class UserConsole extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col-xs-4"></div>
+          <div className="col-xs-4"/>
           <div className="col-xs-4 body-sections row">
             <div className="col-xs-6 console-buttons-container">
-              <input 
-                type="button" 
+              <input
+                type="button"
                 id="newApplicationButton"
-                className="console-button btn btn-primary btn-lg" 
-                value="Add New Application" 
+                className="console-button btn btn-primary btn-lg"
+                value="Add New Application"
                 onClick={this.inputClicked}
               />
             </div>
             <div className="col-xs-6 console-buttons-container">
-              <input 
-                type="button" 
+              <input
+                type="button"
                 id="listOfApplicationsButton"
-                className="console-button btn btn-success btn-lg" 
-                value="List of Applications" 
+                className="console-button btn btn-success btn-lg"
+                value="List of Applications"
                 onClick={this.inputClicked}
               />
             </div>
           </div>
-          <div className="col-xs-4"></div>
+          <div className="col-xs-4"/>
         </div>
       </div>
       );
@@ -151,28 +151,28 @@ class UserConsole extends Component {
   getCreateApplicationPage = () => {
     return (
       <div className="row">
-        <div className="col-xs-2"></div>
+        <div className="col-xs-2"/>
         <div className="col-xs-8 body-sections-small-rtl-text">
           <h1>Fill the form and enter your application information:</h1>
           <form onSubmit={this.onUploadApplicationSubmit} className="form-container">
-            <div className="input-field"> 
+            <div className="input-field">
               <div className="form-group">
                 <label htmlFor="name">Application Name:</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  id="name" 
+                <input
+                  type="text"
+                  className="form-control"
+                  id="name"
                   onChange={this.handleInputChanged}
                 />
               </div>
             </div>
-            <div className="input-field"> 
+            <div className="input-field">
               <div className="form-group">
                 <label htmlFor="description">Description:</label>
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  id="description" 
+                <input
+                  type="text"
+                  className="form-control"
+                  id="description"
                   onChange={this.handleInputChanged}
                 />
               </div>
@@ -190,17 +190,17 @@ class UserConsole extends Component {
             <input type="submit" className="btn btn-success btn-lg input-field"/>
           </form>
         </div>
-        <div className="col-xs-2"></div>
+        <div className="col-xs-2"/>
       </div>
     );
   }
 
   getListOfApplicationsPage = () => {
     const applicationListCards = this.state.applications.map(
-      (application) => 
+      (application) =>
       <div>
         <div key={application[0]} className="row">
-            <div className="col-xs-2"></div>
+            <div className="col-xs-2"/>
             <div className="col-xs-8 body-sections">
               <div className="body-sections row">
                 <div className="col-xs-5 console-title-container">
@@ -228,7 +228,7 @@ class UserConsole extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-xs-2"></div>
+            <div className="col-xs-2"/>
           </div>
           <hr style={{margin: "40px"}}/>
         </div>

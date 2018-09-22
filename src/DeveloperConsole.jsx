@@ -168,7 +168,7 @@ class DeveloperConsole extends Component {
   getCreateApplicationPage = () => {
     return (
       <div className="row">
-        <div className="col-xs-2"></div>
+        <div className="col-xs-2"/>
         <div className="col-xs-8 body-sections-small-rtl-text">
           <h1>Fill the form and enter your application information:</h1>
           <form onSubmit={this.onUploadApplicationSubmit} className="form-container">
@@ -207,7 +207,7 @@ class DeveloperConsole extends Component {
             <input type="submit" className="btn btn-success btn-lg input-field"/>
           </form>
         </div>
-        <div className="col-xs-2"></div>
+        <div className="col-xs-2"/>
       </div>
     );
   }
@@ -217,7 +217,7 @@ class DeveloperConsole extends Component {
       (application, index) => 
       <div>
         <div key={application[0]} className="row">
-            <div className="col-xs-2"></div>
+            <div className="col-xs-2"/>
             <div className="col-xs-8 body-sections">
               <div className="body-sections row">
                 <div className="col-xs-5 console-title-container">
@@ -253,7 +253,7 @@ class DeveloperConsole extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-xs-2"></div>
+            <div className="col-xs-2"/>
           </div>
           <hr style={{margin: "40px"}}/>
         </div>

@@ -22,17 +22,17 @@ class SignUp extends Component {
 		if (!this.state.username || !this.state.password) {
 			alert("Fill the fields and try again!");
 			return;
-		}  
+		}
 		
 		// Save to blockchain
 		if (this.props.memberManagerContract  && this.props.accounts) {
 			if (this.state.isDeveloper) {
 				this.props.memberManagerContract.signUp(this.state.username, this.state.password, true, { from: this.props.accounts[0]}).then(() => {
-        			console.log(`Successdul developer signUp`);
+        			console.log(`Successful developer signUp`);
       			});
 			} else {
 				this.props.memberManagerContract.signUp(this.state.username, this.state.password, false, { from: this.props.accounts[0]}).then(() => {
-        			console.log(`uccessdul user signUp`);
+        			console.log(`Successful user signUp`);
       			});
 			}
 		}
@@ -50,11 +50,11 @@ class SignUp extends Component {
 		return (
 			<div>
 				<div className="row">
-					<div className="col-xs-4"></div>
+					<div className="col-xs-4"/>
 					<div className="col-xs-4 body-sections">
 						{this.getFormHtml()}
 					</div>
-					<div className="col-xs-4"></div>
+					<div className="col-xs-4"/>
 				</div>
 				
 			</div>
