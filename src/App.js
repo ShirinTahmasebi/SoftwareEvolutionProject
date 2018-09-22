@@ -83,9 +83,21 @@ class App extends Component {
       <div className="header row">
         <div className="col-xs-4 header-sections"/>
         <div className="col-xs-4 header-sections header-title">Application Store</div>
-        <div className="col-xs-4 header-sections"/>
+        <div className="col-xs-4 header-sections header-login">
+          <input type="button" className="login-button btn btn-default btn-lg" value="Logout"
+                 onClick={this.logOutClicked}/>
+        </div>
       </div>
     );
+  };
+
+  logOutClicked = () => {
+    this.setState({
+      openLogin: true,
+      isMemberLoggedIn: false,
+      roleNumber: 0,
+      memberId: 0,
+    });
   };
 
   getDeveloperContent = () => {
