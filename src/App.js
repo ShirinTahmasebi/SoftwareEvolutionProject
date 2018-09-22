@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import MemberManager from '../build/contracts/MemberManager.json'
-import ApplicationManager from '../build/contracts/ApplicationManager.json'
-import getWeb3 from './utils/getWeb3'
-import SignUp from './SignUp'
-import Login from './Login'
-import DeveloperConsole from './DeveloperConsole'
-import UserConsole from './UserConsole'
+import React, {Component} from 'react';
+import MemberManager from '../build/contracts/MemberManager.json';
+import ApplicationManager from '../build/contracts/ApplicationManager.json';
+import getWeb3 from './utils/getWeb3';
+import SignUp from './SignUp';
+import Login from './Login';
+import DeveloperConsole from './DeveloperConsole';
+import UserConsole from './UserConsole';
 
 class App extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       web3: null,
@@ -19,93 +19,101 @@ class App extends Component {
       openLogin: false,
       isMemberLoggedIn: false,
       roleNumber: 0, // 0 for guest, 1 for developer, 2 for users, 3 for admin
-      memberId: 0, // It can be id of a user of a develoer - Role is stored in roleNumber
-    }
+      memberId: 0, // It can be id of a user of a developer - Role is stored in roleNumber
+    };
   }
 
   componentWillMount() {
     // Get network provider and web3 instance
     getWeb3
-    .then(results => {
-      this.setState({
-        web3: results.web3
-      })
+      .then(results => {
+        this.setState({
+          web3: results.web3,
+        });
 
-      // Instantiate contract once web3 provided.
-      this.instantiateContract()
-    })
-    .catch(() => {
-      console.log('Error finding web3.')
-    })
+        // Instantiate contract once web3 provided.
+        this.instantiateContract();
+      })
+      .catch(() => {
+        console.log('Error finding web3.');
+      });
   }
 
   instantiateContract() {
 
     const contract = require('truffle-contract');
+
+    // Add Contract: Instantiate All Contracts Here
     const memberManager = contract(MemberManager);
     const applicationManager = contract(ApplicationManager);
+
+    // Add Contract: Set provider for all contracts here
     memberManager.setProvider(this.state.web3.currentProvider);
     applicationManager.setProvider(this.state.web3.currentProvider);
 
     // Get accounts.
     this.state.web3.eth.getAccounts((error, accounts) => {
       this.setState({accounts});
+
+      // Add Contract: Add contract instances in state after deployment
+
       // When memberManager has been deployed, do ...
       memberManager.deployed().then((memManagerInstance) => {
-        this.setState({memberManagerInstance:memManagerInstance});
+        this.setState({memberManagerInstance: memManagerInstance});
       });
 
       // When applicationManager has been deployed, do ...
       applicationManager.deployed().then((appManagerInstnace) => {
-        this.setState({applicationManagerInstance:appManagerInstnace});
+        this.setState({applicationManagerInstance: appManagerInstnace});
       });
-    })
+    });
   }
-  
+
   openLoginPage = (openLogin) => {
     this.setState({openLogin});
-  }
+  };
 
   setIsMemberLoggedIn = (isMemberLoggedIn, roleNumber, memberId) => {
     // Role number = 0 for guest, 1 for developer, 2 for users, 3 for admin
     this.setState({isMemberLoggedIn, roleNumber, memberId});
-  }
+  };
 
   getSimpleHeader = () => {
     return (
       <div className="header row">
-          <div className="col-xs-4 header-sections"></div>
-          <div className="col-xs-4 header-sections header-title">Application Store</div>
-          <div className="col-xs-4 header-sections"></div>
-        </div>
-      );
-  }
+        <div className="col-xs-4 header-sections"/>
+        <div className="col-xs-4 header-sections header-title">Application Store</div>
+        <div className="col-xs-4 header-sections"/>
+      </div>
+    );
+  };
 
   getDeveloperContent = () => {
     return (
-      <DeveloperConsole 
-        memberManagerContract={this.state.memberManagerInstance} 
-        applicationManagerContract={this.state.applicationManagerInstance} 
+      <DeveloperConsole
+        memberManagerContract={this.state.memberManagerInstance}
+        applicationManagerContract={this.state.applicationManagerInstance}
         accounts={this.state.accounts}
-        memberId={this.state.memberId} 
+        memberId={this.state.memberId}
       />
     );
-  }
+  };
 
   getUserContent = () => {
     return (
-        <UserConsole 
-          memberManagerContract={this.state.memberManagerInstance} 
-          applicationManagerContract={this.state.applicationManagerInstance} 
-          accounts={this.state.accounts}
-          memberId={this.state.memberId}
-        />
-      );
-  }
+      <UserConsole
+        memberManagerContract={this.state.memberManagerInstance}
+        applicationManagerContract={this.state.applicationManagerInstance}
+        accounts={this.state.accounts}
+        memberId={this.state.memberId}
+      />
+    );
+  };
 
   getAdminContent = () => {
+    // TODO: Think more! Is it necessary to add it now?
     return (<div>Admin content</div>);
-  }
+  };
 
   render() {
     if (this.state.isMemberLoggedIn) {
@@ -123,22 +131,23 @@ class App extends Component {
         // If it is admin show a list of developers and users
         content = this.getAdminContent();
       } else {
-        // Probabely user has not logged in !
+        // Probably user has not logged in !
       }
 
       return (
         <div>
           {header}
           {content}
-        </div>);
+        </div>
+      );
 
-    } else if(!this.state.openLogin) {
+    } else if (!this.state.openLogin) {
       // Show signup form and login buttons in header
       return (
         <div>
-          <Login 
-            memberManagerContract={this.state.memberManagerInstance} 
-            accounts={this.state.accounts} 
+          <Login
+            memberManagerContract={this.state.memberManagerInstance}
+            accounts={this.state.accounts}
             openLoginCallback={this.openLoginPage}
             openLoginFlag={this.state.openLogin}
             setIsMemeberLoggedIn={this.setIsMemberLoggedIn}
@@ -148,20 +157,20 @@ class App extends Component {
       );
     } else {
       // Show Login form with signup buttons in header
-        return (
-          <div>
-            <Login 
-              memberManagerContract={this.state.memberManagerInstance} 
-              accounts={this.state.accounts} 
-              openLoginCallback={this.openLoginPage}
-              openLoginFlag={this.state.openLogin}
-              setIsMemeberLoggedIn={this.setIsMemberLoggedIn}
-            />
-          </div>
-        );
+      return (
+        <div>
+          <Login
+            memberManagerContract={this.state.memberManagerInstance}
+            accounts={this.state.accounts}
+            openLoginCallback={this.openLoginPage}
+            openLoginFlag={this.state.openLogin}
+            setIsMemeberLoggedIn={this.setIsMemberLoggedIn}
+          />
+        </div>
+      );
     }
 
   }
 }
 
-export default App
+export default App;

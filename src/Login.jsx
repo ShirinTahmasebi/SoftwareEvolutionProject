@@ -31,11 +31,11 @@ class Login extends Component {
 			let getMemeberIdByUsernameFunctoin;
 			
 			if(this.state.isDeveloperLogin){
-				// Check if there is a developer with the enterd username and password
+				// Check if there is a developer with the entered username and password
 				// If there is a developer with specified information then Login!
 				getMemeberIdByUsernameFunctoin = this.props.memberManagerContract.getDeveloperIdByUsername;
 			} else {
-				// Check if there is a developer with the enterd username and password
+				// Check if there is a developer with the entered username and password
 				// If there is a developer with specified information then Login!
 				getMemeberIdByUsernameFunctoin = this.props.memberManagerContract.getUserIdByUsername;
 			}
@@ -73,7 +73,7 @@ class Login extends Component {
 	}
 
 	loginCheckingProcessStep2 = (member) => {
-		// In the next line == was intentionally used instead of === (Because as far as I am concered the id is returned neither as string nor as integer)
+		// In the next line == was intentionally used instead of === (Because as far as I am concerned the id is returned neither as string nor as integer)
 		if(!member || (member[0] == 0 && member[1] === '' && member[2] === '')) {
 			// No member was found
 			return this.appropriateError();
@@ -94,7 +94,7 @@ class Login extends Component {
 		if (!this.props.openLoginFlag) {
 			return (
 				<div className="header row">
-					<div className="col-xs-4 header-sections"></div>
+					<div className="col-xs-4 header-sections"/>
 					<div className="col-xs-4 header-sections header-title">Application Store</div>
 					<div className="col-xs-4 header-sections header-login">
 						<input 
@@ -118,18 +118,18 @@ class Login extends Component {
 			return (
 				<div>
 					<div className="header row">
-						<div className="col-xs-4 header-sections"></div>
+						<div className="col-xs-4 header-sections"/>
 						<div className="col-xs-4 header-sections header-title">Application Store</div>
 						<div className="col-xs-4 header-sections header-login">
 							<input type="button" className="login-button btn btn-default btn-lg" value="Sign up" onClick={this.signUpClicked}/> 
 						</div>
 					</div>
 					<div className="row">
-						<div className="col-xs-4"></div>
+						<div className="col-xs-4"/>
 						<div className="col-xs-4 body-sections">
 							{this.getFormHtml()}
 						</div>
-						<div className="col-xs-4"></div>
+						<div className="col-xs-4"/>
 					</div>
 				</div>
 				);
