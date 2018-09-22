@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ipfs from './ipfs';
 
 import './UserConsole.css';
+import ApplicationList from "./ApplicationList";
 
 class UserConsole extends Component {
 
@@ -15,6 +16,7 @@ class UserConsole extends Component {
       name: null,
       description: null,
       applications: [],
+      developers: [],
       render: false,
     };
 
@@ -82,66 +84,34 @@ class UserConsole extends Component {
   };
 
   getApplications = () => {
-    this.setState({applications: []});
-    this.props.applicationManagerContract.getApplicationsCount()
-      .then((applicatoinCount) => {
-        const addApplicationToStateListMethod = (application) => {
+    this.setState({applications: [], developers: []});
+    this.props.applicationManagerContract.applicationIdsByDeveloperId(parseInt(this.props.memberId, 10))
+      .then((applicationIdsString) => {
+        const applicationIds = applicationIdsString.split(":");
+
+        const addApplicationToStateListMethod = (application, developer) => {
           this.state.applications.push(application);
+          this.state.developers.push(developer);
           this.setState({render: true});
         };
 
-        for (let i = 1; i <= applicatoinCount; i++) {
-          this.props.applicationManagerContract.applications(i)
-            .then((application) => {
-              addApplicationToStateListMethod(application);
-            });
+        for (let i = 1; i <= applicationIds.length; i++) {
+          let application;
+          this.props.applicationManagerContract.applications(applicationIds[i])
+            .then((_application) => {
+              application = _application;
+              return _application;
+            }).then((_application) => {
+            return this.props.memberManagerContract.developers(_application[4]);
+          }).then((developer) => {
+            addApplicationToStateListMethod(application, developer);
+          });
         }
       });
   };
 
   getListOfApplicationsPage = () => {
-    const applicationListCards = this.state.applications.map(
-      (application) =>
-        <div>
-          <div key={application[0]} className="row">
-            <div className="col-xs-2"/>
-            <div className="col-xs-8 body-sections">
-              <div className="body-sections row">
-                <div className="col-xs-5 console-title-container">
-                  Name:
-                </div>
-                <div className="col-xs-7 console-content-container">
-                  <h1>{application[1]}</h1>
-                </div>
-              </div>
-              <div className="body-sections row">
-                <div className="col-xs-5 console-title-container">
-                  Description:
-                </div>
-                <div className="col-xs-7 console-content-container">
-                  {application[2]}
-                </div>
-              </div>
-              <br/>
-              <div className="body-sections row">
-                <div className="col-xs-5 console-title-container">
-                  Application Preview:
-                </div>
-                <div className="col-xs-7 console-content-container">
-                  <img src={`https://ipfs.io/ipfs/${application[3]}`} alt=""/>
-                </div>
-              </div>
-            </div>
-            <div className="col-xs-2"/>
-          </div>
-          <hr style={{margin: "40px"}}/>
-        </div>,
-    );
-    return (
-      <div>
-        {applicationListCards}
-      </div>
-    );
+    return <ApplicationList applications={this.state.applications} developers={this.state.developers}/>;
   };
 }
 
