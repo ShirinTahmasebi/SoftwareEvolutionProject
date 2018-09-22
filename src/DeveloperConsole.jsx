@@ -142,7 +142,7 @@ class DeveloperConsole extends Component {
             <div className="col-xs-6 console-buttons-container">
               <input
                 type="button"
-                id="newApplicationButton"
+                id={BUTTON_FOR_ITEM_1}
                 className="console-button btn btn-primary btn-lg"
                 value="Add New Application"
                 onClick={this.inputClicked}
@@ -151,7 +151,7 @@ class DeveloperConsole extends Component {
             <div className="col-xs-6 console-buttons-container">
               <input
                 type="button"
-                id="listOfApplicationsButton"
+                id={BUTTON_FOR_ITEM_2}
                 className="console-button btn btn-success btn-lg"
                 value="List of Applications"
                 onClick={this.inputClicked}
