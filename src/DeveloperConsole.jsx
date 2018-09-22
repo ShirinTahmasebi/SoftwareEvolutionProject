@@ -204,7 +204,11 @@ class DeveloperConsole extends Component {
             <br/>
             <br/>
             <br/>
-            <input type="submit" className="btn btn-success btn-lg input-field"/>
+            <div className="row">
+              <input type="submit" className="col-xs-3 btn btn-success btn-lg input-field"/>
+              <input value="Back" className="col-xs-3 btn btn-danger btn-lg input-field"
+                     onClick={this.backToConsoleButtonPage}/>
+            </div>
           </form>
         </div>
         <div className="col-xs-2"/>

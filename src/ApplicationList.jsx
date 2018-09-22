@@ -60,7 +60,6 @@ class ApplicationList extends Component {
               {(this.props.onBackButtonClicked) ?
                 <input type="button" className="login-button btn btn-default btn-lg" value="Back"
                        onClick={this.props.onBackButtonClicked}/> : ''}
-
             </div>
           </div>
           <div className="table-body">
