@@ -25,6 +25,7 @@ class DeveloperConsole extends Component {
       applications: [],
       developers: [],
       render: false,
+      isLoading: false,
     };
   }
 
@@ -62,9 +63,11 @@ class DeveloperConsole extends Component {
       return;
     }
 
+    this.setState({isLoading: true});
     ipfs.files.add(this.state.buffer, (error, result) => {
       if (error) {
         console.error(`onSubmit ipfs.add error is ${error}`);
+        this.setState({isLoading: false});
         return;
       }
       this.setState({ipfsHash: result[0].hash});
@@ -81,7 +84,7 @@ class DeveloperConsole extends Component {
         }).then((applicatoinCount) => {
           return this.props.applicationManagerContract.applications(applicatoinCount);
         }).then(() => {
-          this.setState({whichItemShouldDisplay: ITEM_2});
+          this.setState({whichItemShouldDisplay: ITEM_2, isLoading: false});
         });
       }
     });
@@ -170,6 +173,12 @@ class DeveloperConsole extends Component {
       <div className="row">
         <div className="col-xs-2"/>
         <div className="col-xs-8 body-sections-small-rtl-text">
+          {
+            (this.state.isLoading) ?
+              <div id="spinner" className="loading-container">
+                <div className="loading"/>
+              </div> : ''
+          }
           <h1>Fill the form and enter your application information:</h1>
           <form onSubmit={this.onUploadApplicationSubmit} className="form-container">
             <div className="input-field">
@@ -198,8 +207,6 @@ class DeveloperConsole extends Component {
               <input type='file' onChange={this.onSelectedFileChanged}/>
               <br/>
               <br/>
-              <br/>
-              <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt=""/>
             </div>
             <br/>
             <br/>
