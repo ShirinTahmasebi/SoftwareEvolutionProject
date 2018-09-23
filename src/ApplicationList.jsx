@@ -4,50 +4,22 @@ import './ApplicationList.css';
 
 class ApplicationList extends Component {
   render() {
+    let application1 = null;
+    let application2 = null;
     const applicationListCards = this.props.applications.map(
-      (application, index) =>
-        <div>
-          <div key={application[0]} className="row">
-            <div className="col-xs-2"/>
-            <div className="col-xs-8 body-sections">
-              <div className="body-sections row">
-                <div className="col-xs-5 console-title-container">
-                  Name:
-                </div>
-                <div className="col-xs-7 console-content-container">
-                  <h1>{application[1]}</h1>
-                </div>
-              </div>
-              <div className="body-sections row">
-                <div className="col-xs-5 console-title-container">
-                  Description:
-                </div>
-                <div className="col-xs-7 console-content-container">
-                  {application[2]}
-                </div>
-              </div>
-              {(this.props.developers) ?
-                (<div className="body-sections row">
-                  <div className="col-xs-5 console-title-container">
-                    Developer Name:
-                  </div>
-                  <div className="col-xs-7 console-content-container">
-                    {this.props.developers[index][1]}
-                  </div>
-                </div>) : ''}
-              <div className="body-sections row">
-                <div className="col-xs-5 console-title-container">
-                  Application Preview:
-                </div>
-                <div className="col-xs-7 console-content-container">
-                  <img src={`https://ipfs.io/ipfs/${application[3]}`} alt=""/>
-                </div>
-              </div>
-            </div>
-            <div className="col-xs-2"/>
-          </div>
-          <hr style={{margin: "40px"}}/>
-        </div>,
+      (application, index) => {
+        if (index % 2 === 0) {
+          application1 = application;
+          if ((this.props.applications.length - 1) === index) {
+            return this.drawRowOfApplications(application1, null, index, -1);
+          } else {
+            return null;
+          }
+        } else {
+          application2 = application;
+          return this.drawRowOfApplications(application1, application2, index - 1, index);
+        }
+      },
     );
     return (
       <div>
@@ -69,6 +41,66 @@ class ApplicationList extends Component {
       </div>
     );
   }
+
+  drawRowOfApplications = (application1, application2, index1, index2) => {
+    return (
+      <div className="application-cards-row-container">
+        <div className="application-card">
+          {this.applicationCard(application1, index1)}
+        </div>
+        {
+          (application2) ?
+            <div className="application-card">
+              {this.applicationCard(application2, index2)}
+            </div> : ''
+        }
+      </div>
+    );
+  };
+
+  applicationCard = (application, index) => {
+    return (
+      <div key={application[0]}>
+        <div className="application-image-container">
+          <img src={`https://ipfs.io/ipfs/${application[3]}`} alt=""/>
+        </div>
+        <div className="application-title-container">
+          <span className="title-style">Name:</span>
+          <span className="value-style">{application[1]}</span>
+        </div>
+        <div className="application-title-container">
+          <span className="title-style">Description:</span>
+          <span className="value-style">{this.truncate.apply(application[2], [20, true])}</span>
+        </div>
+        {(this.props.developers) ?
+          (
+            <div className="application-title-container">
+              <span className="title-style">Developer Name:</span>
+              <span className="value-style">{this.props.developers[index][1]}</span>
+            </div>
+          ) : ''}
+        <div className="application-download-button-container">
+          <a
+            className="download-button btn btn-success btn-lg"
+            href={`https://ipfs.io/ipfs/${application[3]}`}
+          >
+            Download
+          </a>
+        </div>
+      </div>
+    );
+
+  };
+
+  truncate(n, useWordBoundary) {
+    if (this.length <= n) {
+      return this;
+    }
+    let subString = this.substr(0, n - 1);
+    return (useWordBoundary
+      ? subString.substr(0, subString.lastIndexOf(' '))
+      : subString) + "...";
+  };
 }
 
 export default ApplicationList;

@@ -6,9 +6,9 @@
 }
 
 .table-container {
-  text-align       : center;
-  padding          : 15px;
-  margin           : 30px;
+  text-align : center;
+  padding    : 15px;
+  margin     : 30px;
 }
 
 .table-body {
@@ -34,4 +34,44 @@
   height           : 30px;
   text-align       : center;
   margin           : 5px;
+}
+
+.application-cards-row-container {
+  height : 380px;
+}
+
+.application-card {
+  background-color : #f8f9fa;
+  height           : 360px;
+  margin           : 10px;
+  float            : right;
+  width            : 47%;
+  border           : 1px solid #721c24;
+}
+
+.application-image-container img {
+  height : 200px;
+  border : 1px solid #721c24;
+  width  : 90%;
+  margin : 10px;
+}
+
+.application-title-container {
+  text-align   : left;
+  padding-left : 25px;
+}
+
+.title-style {
+  color        : #721c24;
+  font-size    : 15px;
+  margin-right : 5px;
+}
+
+.value-style {
+  color     : black;
+  font-size : 18px;
+}
+
+.application-download-button-container {
+  margin : 10px
 }
