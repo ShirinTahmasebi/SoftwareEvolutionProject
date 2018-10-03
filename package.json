@@ -57,7 +57,8 @@
     "ipfs-api": "github:atfornes/js-ipfs-api#transpiled",
     "node-random-name": "^1.0.1",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "truffle-hdwallet-provider": "0.0.6"
   },
   "scripts": {
     "start": "node scripts/start.js",
